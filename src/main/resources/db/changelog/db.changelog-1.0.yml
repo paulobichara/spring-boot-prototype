@@ -1,0 +1,52 @@
+databaseChangeLog:
+    - changeSet:
+        id: initialChangeSet
+        author: paulobichara
+        changes:
+            - createTable:
+                  schemaName: prototype
+                  tableName: user
+                  columns:
+                      - column:
+                            name: id
+                            type: BIGINT
+                            autoIncrement: true
+                            constraints:
+                                primaryKey: true
+                                primaryKeyName: pk_user
+                      - column:
+                            name: email
+                            type: VARCHAR(255)
+                            constraints:
+                                nullable: false
+                                unique: true
+                                uniqueConstraintName: un_email
+                      - column:
+                            name: password
+                            type: VARCHAR(255)
+                            constraints:
+                                nullable: false
+            - createTable:
+                  schemaName: prototype
+                  tableName: user_role
+                  columns:
+                      - column:
+                            name: id
+                            type: BIGINT
+                            autoIncrement: true
+                            constraints:
+                                primaryKey: true
+                                primaryKeyName: pk_role
+                      - column:
+                            name: user_id
+                            type: BIGINT
+                            constraints:
+                                nullable: false
+                                deleteCascade: true
+                                foreignKeyName: ur_fk_user
+                                references: prototype.user(id)
+                      - column:
+                            name: role
+                            type: VARCHAR(255)
+                            constraints:
+                                nullable: false
