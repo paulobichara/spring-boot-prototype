@@ -52,18 +52,11 @@ public class UserService {
      */
     @IsAdmin
     public User addNewAdmin(@Valid NewUserDto dto) {
-        return userRepo.save(createNewAdminUser(dto, Role.ROLE_ADMIN));
-    }
-
-    /**
-     * Creates a new user manager. User managers have {@link Role} ROLE_USER_MANAGER and can access and modify only
-     * user records.
-     * @param dto user manager registration information
-     * @return persisted user manager {@link User} instance
-     */
-    @IsAdmin
-    public User addNewUserManager(@Valid NewUserDto dto) {
-        return userRepo.save(createNewAdminUser(dto, Role.ROLE_USER_MANAGER));
+        User user = new User();
+        user.setEmail(dto.getEmail());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.getRoles().add(Role.ROLE_ADMIN);
+        return userRepo.save(user);
     }
 
     /**
@@ -129,13 +122,5 @@ public class UserService {
             return optional.get();
         }
         throw new UserNotFoundException(userId);
-    }
-
-    private User createNewAdminUser(NewUserDto dto, Role role) {
-        User user = new User();
-        user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.getRoles().add(role);
-        return user;
     }
 }

@@ -31,8 +31,8 @@ class UserRepositoryTest {
         assertThat(found, is(notNullValue()));
         assertThat(found.getEmail(), equalTo(EMAIL));
         assertThat(found.getPassword(), equalTo(PASSWORD));
-        assertThat(found.getRoles().size(), equalTo(3));
-        assertThat(found.getRoles(), CoreMatchers.hasItems(Role.ROLE_USER_MANAGER, Role.ROLE_ADMIN, Role.ROLE_USER));
+        assertThat(found.getRoles().size(), equalTo(2));
+        assertThat(found.getRoles(), CoreMatchers.hasItems(Role.ROLE_ADMIN, Role.ROLE_USER));
     }
 
     @AfterEach
@@ -47,7 +47,6 @@ class UserRepositoryTest {
 
         user.getRoles().add(Role.ROLE_USER);
         user.getRoles().add(Role.ROLE_ADMIN);
-        user.getRoles().add(Role.ROLE_USER_MANAGER);
 
         return user;
     }
