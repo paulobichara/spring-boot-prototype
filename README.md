@@ -138,7 +138,7 @@ HTTP/1.1 200
   
 ### Default Admin Account
 
-In order to create other admins and user managers, the application creates a default admin user account based on the 
+In order to create other admins, the application creates a default admin user account based on the 
 information provided in the `application.yml` configuration file:
 
 ```yaml

@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 import org.springframework.security.access.annotation.Secured;
 
 /**
- * Annotation that indicates that the given method can only be accessed by admins or user managers
+ * Annotation that indicates that the given method can only be accessed by admins.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
