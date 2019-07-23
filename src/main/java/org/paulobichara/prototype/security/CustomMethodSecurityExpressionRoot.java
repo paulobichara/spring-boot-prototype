@@ -1,6 +1,7 @@
 package org.paulobichara.prototype.security;
 
 import org.paulobichara.prototype.model.User;
+import org.paulobichara.prototype.security.annotation.IsAdmin;
 import org.paulobichara.prototype.security.annotation.IsAdminOrOwner;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
@@ -10,8 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 /**
  * The purpose of this class is to create a custom SpEl operand. This operand is defined by the method 'isOwner' and
  * has the same name as the method. The use of this operand can be found on
- * {@link IsAdminOrOwner} and
- * {@link IsAdminManagerOrOwner} annotation.
+ * {@link IsAdminOrOwner} and {@link IsAdmin} annotation.
  */
 class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implements
     MethodSecurityExpressionOperations {

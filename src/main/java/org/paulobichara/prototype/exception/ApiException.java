@@ -9,11 +9,6 @@ public class ApiException extends RuntimeException {
     @Getter
     private final Object[] args;
 
-    ApiException(String messageProperty) {
-        super(messageProperty);
-        this.args = new Object[]{};
-    }
-
     ApiException(String messageProperty, Object[] args) {
         super(messageProperty);
         this.args = args;

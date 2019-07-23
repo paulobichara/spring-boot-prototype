@@ -3,20 +3,20 @@ package org.paulobichara.prototype.web;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.paulobichara.prototype.config.DefaultAdminProperties;
-import org.paulobichara.prototype.model.User;
-import org.paulobichara.prototype.repository.UserRepository;
 import java.util.List;
 import lombok.Getter;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.paulobichara.prototype.config.DefaultAdminProperties;
+import org.paulobichara.prototype.model.User;
+import org.paulobichara.prototype.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -34,6 +34,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 class AdminControllerTest extends BaseUserRestTest {
 
     private static final String USER_EMAIL = "new-user@email.com";
+    private static final String USER_PASSWORD = "new-user-password";
 
     private static final String ADMIN_EMAIL = "new-admin@email.com";
     private static final String ADMIN2_EMAIL = "new-admin2@email.com";
@@ -70,11 +71,6 @@ class AdminControllerTest extends BaseUserRestTest {
         userRepo.findByEmail(USER_EMAIL).ifPresent(userRepo::delete);
     }
 
-    @AfterEach
-    void afterEach() {
-        super.tearDown();
-    }
-
     @AfterAll
     void tearDown() {
         userRepo.findByEmail(ADMIN_EMAIL).ifPresent(userRepo::delete);
@@ -88,7 +84,12 @@ class AdminControllerTest extends BaseUserRestTest {
 
     @Test
     void defaultAdminNeedsToCreateAdmins() {
-        checkCanCreateAdmins(adminProperties.getEmail(), adminProperties.getPassword(), ADMIN2_EMAIL, ADMIN2_PASSWORD);
+        String token = getAuthenticationToken(adminProperties.getEmail(), adminProperties.getPassword());
+        User user = createProtectedUser(token, ADMIN2_EMAIL, ADMIN2_PASSWORD, getBaseUrl() + "/admins");
+        assertThat(user, is(notNullValue()));
+        assertThat(user.getPassword(), is(nullValue()));
+        assertThat(user.getId(), is(notNullValue()));
+        assertThat(user.getEmail(), equalTo(ADMIN2_EMAIL));
     }
 
     @Test
@@ -104,17 +105,38 @@ class AdminControllerTest extends BaseUserRestTest {
 
     @Test
     void adminNeedsToAccessOtherUsers() {
-        checkCanAccessUserData(createUser(USER_EMAIL, "password").getId(), ADMIN_EMAIL, ADMIN_PASSWORD, HttpStatus.OK);
+        checkCanAccessUserData(createUser(USER_EMAIL, USER_PASSWORD).getId(), ADMIN_EMAIL, ADMIN_PASSWORD, HttpStatus.OK);
     }
 
     @Test
     void adminNeedsToAccessAllUsers() {
-        checkCanAccessAllUsers(ADMIN_EMAIL, ADMIN_PASSWORD);
+        String token = getAuthenticationToken(ADMIN_EMAIL, ADMIN_PASSWORD);
+        assertThat(token, is(notNullValue()));
+
+        createUser(USER_EMAIL, USER_PASSWORD);
+        ResponseEntity<List<User>> listResponse = getRestTemplate().exchange(getBaseUrl() + "/users",
+            HttpMethod.GET, new HttpEntity<>(headersWithToken(token)),
+            new ParameterizedTypeReference<List<User>>(){});
+
+        assertThat(listResponse.getStatusCode(), equalTo(HttpStatus.OK));
+        assertThat(listResponse.getBody(), is(notNullValue()));
+        assertThat(listResponse.getBody().size(), equalTo(3));
     }
 
     @Test
     void adminsNeedsToDeleteOtherUsers() {
-        checkCanDeleteOthersData(ADMIN_EMAIL, ADMIN_PASSWORD);
+        User user = createUser(USER_EMAIL, USER_PASSWORD);
+        assertThat(user, is(notNullValue()));
+
+        String token = getAuthenticationToken(ADMIN_EMAIL, ADMIN_PASSWORD);
+        assertThat(token, is(notNullValue()));
+
+        ResponseEntity<User> response = getRestTemplate().exchange(getBaseUrl() + "/users/" + user.getId(),
+            HttpMethod.DELETE, new HttpEntity<>(headersWithToken(token)), User.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+        assertThat(response.getBody(), is(notNullValue()));
+        assertThat(response.getBody().getId(), equalTo(user.getId()));
     }
 
     @Test

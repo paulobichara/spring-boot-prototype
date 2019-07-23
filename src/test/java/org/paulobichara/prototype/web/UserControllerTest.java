@@ -55,7 +55,6 @@ class UserControllerTest extends BaseUserRestTest {
     void tearDown() {
         userRepo.findByEmail(USER_EMAIL).ifPresent(userRepo::delete);
         userRepo.findByEmail(USER2_EMAIL).ifPresent(userRepo::delete);
-        super.tearDown();
     }
 
     @Test
