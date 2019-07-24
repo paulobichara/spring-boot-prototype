@@ -32,7 +32,7 @@ class SwaggerConfig {
 
     @Bean
     public Docket swaggerSpringFoxDocket() {
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.SWAGGER_2)
                 .enable(enabled)
                 .pathMapping("/")
                 .apiInfo(ApiInfo.DEFAULT)
@@ -45,12 +45,10 @@ class SwaggerConfig {
                 .directModelSubstitute(java.time.LocalDateTime.class, Date.class)
                 .securityContexts(Collections.singletonList(securityContext()))
                 .securitySchemes(Collections.singletonList(apiKey()))
-                .useDefaultResponseMessages(false);
-
-        docket = docket.select()
-                .paths(regex(DEFAULT_INCLUDE_PATTERN))
+                .useDefaultResponseMessages(false)
+                .select()
+                    .paths(regex(DEFAULT_INCLUDE_PATTERN))
                 .build();
-        return docket;
     }
 
 
