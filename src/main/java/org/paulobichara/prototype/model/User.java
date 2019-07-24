@@ -40,7 +40,7 @@ public class User {
     @Column
     @Setter
     @Email(message = "{validation.email.notValid}")
-    @NotEmpty(message = "{email.not.empty}")
+    @NotEmpty(message = "{validation.email.notEmpty}")
     private String email;
 
     @Column
