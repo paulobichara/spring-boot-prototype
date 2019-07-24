@@ -109,12 +109,7 @@ class UserControllerTest extends BaseUserRestTest {
         UpdateUserDto dto = new UpdateUserDto();
         dto.setPassword(CHANGED_PASSWORD);
 
-        ResponseEntity<User> response = restTemplate.postForEntity(getBaseUrl() + "/users/" + user.getId(),
-                new HttpEntity<>(dto, headers), User.class);
-
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(response.getBody(), is(notNullValue()));
-        assertThat(response.getBody().getId(), equalTo(user.getId()));
+        restTemplate.put(getBaseUrl() + "/users/" + user.getId(), new HttpEntity<>(dto, headers));
 
         getAuthenticationToken(USER_EMAIL, CHANGED_PASSWORD);
     }
