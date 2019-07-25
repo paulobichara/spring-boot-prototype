@@ -1,5 +1,7 @@
 package org.paulobichara.prototype.security;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.paulobichara.prototype.model.User;
 import org.paulobichara.prototype.security.annotation.IsAdmin;
 import org.paulobichara.prototype.security.annotation.IsAdminOrOwner;
@@ -16,8 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implements
     MethodSecurityExpressionOperations {
 
-    private Object filterObject;
-    private Object returnObject;
+    @Getter @Setter private Object filterObject;
+
+    @Getter @Setter private Object returnObject;
 
     private final UserDetailsService userDetailsService;
 
@@ -44,28 +47,8 @@ class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implemen
     }
 
     @Override
-    public Object getFilterObject() {
-        return this.filterObject;
-    }
-
-    @Override
-    public Object getReturnObject() {
-        return this.returnObject;
-    }
-
-    @Override
     public Object getThis() {
         return this;
-    }
-
-    @Override
-    public void setFilterObject(Object obj) {
-        this.filterObject = obj;
-    }
-
-    @Override
-    public void setReturnObject(Object obj) {
-        this.returnObject = obj;
     }
 
 }
