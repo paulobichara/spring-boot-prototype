@@ -1,5 +1,8 @@
 image: java:8-jdk
 
+variables:
+  GIT_STRATEGY: fetch
+
 stages:
   - build
   - test
@@ -28,5 +31,6 @@ test:
   script:
     - ./gradlew check
   artifacts:
+    when: always
     reports:
       junit: build/test-results/test/TEST-*.xml
