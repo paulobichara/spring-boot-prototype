@@ -29,7 +29,7 @@ build:
 test:
   stage: test
   script:
-    - ./gradlew check
+    - ./gradlew --info check
   artifacts:
     when: always
     reports:
