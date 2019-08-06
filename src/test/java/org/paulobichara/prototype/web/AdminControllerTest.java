@@ -9,8 +9,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.List;
 import lombok.Getter;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -65,8 +65,8 @@ class AdminControllerTest extends BaseUserRestTest {
         token = getAuthenticationToken(ADMIN_EMAIL, ADMIN_PASSWORD);
     }
 
-    @BeforeEach
-    void beforeEach() {
+    @AfterEach
+    void afterEach() {
         userRepo.findByEmail(ADMIN2_EMAIL).ifPresent(userRepo::delete);
         userRepo.findByEmail(USER_EMAIL).ifPresent(userRepo::delete);
     }

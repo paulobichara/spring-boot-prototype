@@ -74,7 +74,7 @@ class UserControllerTest extends BaseUserRestTest {
 
     @Test
     void usersNeedsToCreateAccount() {
-        User user = createUser("new-user@email.com", "new-user-password");
+        User user = createUser(USER_EMAIL, USER_PASSWORD);
         assertThat(user.getPassword(), is(nullValue()));
         assertThat(user.getId(), is(notNullValue()));
         assertThat(user.getEmail(), equalTo(USER_EMAIL));
