@@ -1,5 +1,7 @@
 package org.paulobichara.prototype.repository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import org.paulobichara.prototype.dto.search.SearchCriteria;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -28,9 +30,21 @@ public class EntitySpecification<T> implements Specification<T> {
             case NEGATION:
                 return builder.notEqual(root.get(criteria.getKey()), criteria.getValue());
             case GREATER_THAN:
-                return builder.greaterThan(root.get(criteria.getKey()), criteria.getValue().toString());
+                if (criteria.getValue() instanceof LocalDate) {
+                    return builder.greaterThan(root.get(criteria.getKey()), (LocalDate) criteria.getValue());
+                } else if (criteria.getValue() instanceof LocalTime) {
+                    return builder.greaterThan(root.get(criteria.getKey()), (LocalTime) criteria.getValue());
+                } else {
+                    return builder.greaterThan(root.get(criteria.getKey()), criteria.getValue().toString());
+                }
             case LESS_THAN:
-                return builder.lessThan(root.get(criteria.getKey()), criteria.getValue().toString());
+                if (criteria.getValue() instanceof LocalDate) {
+                    return builder.lessThan(root.get(criteria.getKey()), (LocalDate) criteria.getValue());
+                } else if (criteria.getValue() instanceof LocalTime) {
+                    return builder.lessThan(root.get(criteria.getKey()), (LocalTime) criteria.getValue());
+                } else {
+                    return builder.lessThan(root.get(criteria.getKey()), criteria.getValue().toString());
+                }
             case LIKE:
             case STARTS_WITH:
             case ENDS_WITH:

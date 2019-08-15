@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 public class UpdateUserDto {
 
-    @Length(min = 8, message = "validation.password.notValid")
+    @Length(min = 8, message = "{validation.password.notValid}")
     private String password;
 
 }

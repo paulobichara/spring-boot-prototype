@@ -9,7 +9,7 @@ spring:
             initialization-fail-timeout: 60000
 
     liquibase:
-        change-log: classpath:/db/changelog/db.changelog-master.yml
+        change-log: classpath:/db/changelog/db.changelog-master.yaml
 
 server:
     error:

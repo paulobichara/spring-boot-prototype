@@ -6,11 +6,12 @@ spring:
         driverClassName: org.h2.Driver
         username: sa
         password: password
+
     jpa:
         database-platform: org.hibernate.dialect.H2Dialect
 
     liquibase:
-        change-log: classpath:/db/changelog/db.changelog-master.yml
+        change-log: classpath:/db/changelog/db.changelog-master.yaml
 
 api:
     admin:
