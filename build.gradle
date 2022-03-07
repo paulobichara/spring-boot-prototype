@@ -12,7 +12,6 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'jacoco'
-    id 'com.palantir.docker-run' version '0.22.1'
 }
 
 apply plugin: 'org.springframework.boot'
@@ -51,14 +50,6 @@ jacocoTestReport {
         csv.enabled = false
         html.destination = file("${buildDir}/jacocoHtml")
     }
-}
-
-dockerRun {
-    name 'prototype-mysql'
-    image 'mysql:8.0'
-    ports '3306:3306'
-    daemonize true
-    env 'MYSQL_ROOT_PASSWORD': 'password', 'TZ': 'UTC'
 }
 
 configurations {

@@ -23,27 +23,13 @@ All tests will be executed using a H2 in-memory database, so at this point no ad
 
 ## Setup MySQL Database
 
-The API project is configured with an [extension](https://github.com/palantir/gradle-docker#docker-run-plugin) for manipulating **docker** containers. Considering an environment with 
-docker installed, all that needs to be done is:
+To run a docker container with the required MySQL version for a local run, just execute:
 
-```
-./gradlew dockerRun
-```
-
-All the configuration for the required **development** database container can be found on **build.gradle** file. It 
-basically uses MySQL v8.0 with a predefined root password and timezone setting to UTC:
-
-```groovy
-dockerRun {
-    name 'prototype-mysql'
-    image 'mysql:8.0'
-    ports '3306:3306'
-    daemonize true
-    env 'MYSQL_ROOT_PASSWORD': 'password', 'TZ': 'UTC'
-}
+```shell
+docker run -p 3306:3306 --name prototype-mysql -e MYSQL_ROOT_PASSWORD=password -d mysql:8.0
 ```
 
-There's also the option to manually setup the database and change the sample **application.yml** properties related to 
+There's also the option to manually set up the database and change the sample **application.yml** properties related to 
 the database connection:
 
 ```yaml
